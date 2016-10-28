@@ -103,6 +103,8 @@ jQuery.fn.autocorrect = function(options) {
             var valueOfField = document.activeElement.innerHTML;
         }
 
+        console.log(valueOfField);
+
         // Get value of field upto caret's current position from start 
         var stringUptoCaretPosition = (valueOfField).substr(0, caretPosition);
 
