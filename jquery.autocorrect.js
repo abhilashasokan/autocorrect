@@ -17,7 +17,10 @@ jQuery.fn.autocorrect = function(options) {
     }
     */
     // Default parameters for plugin with some default corrections
-
+    $(document).click(function(e) {
+        $(document).find('.actiObjectSelected').removeClass("actiObjectSelected");
+        $("#" + e.target.id).addClass("actiObjectSelected");
+    });
     if (typeof(Storage) !== "undefined") {
         var retrievedObject = localStorage.getItem('defaultCorrections');
         corrections = JSON.parse(retrievedObject)
@@ -40,7 +43,11 @@ jQuery.fn.autocorrect = function(options) {
 
     // Function used to get caret's position
     getCaretPosition = function(editableDiv) {
-        console.log(editableDiv);
+        var selection = window.getSelection(),
+            selectedText = selection.toString(),
+            selectedRange = selection.getRangeAt(0);
+        //console.log(selectedRange.startOffset);
+        /*
         var caretPos = 0,
             sel, range;
         if (window.getSelection) {
@@ -52,13 +59,30 @@ jQuery.fn.autocorrect = function(options) {
                 }
             }
         }
-        return caretPos;
+        */
+        return selectedRange.startOffset;
     }
 
+    function SetCaretPosition(object, pos) {
+        // Get key data
+        var el = object.get(0); // Strip inner object from jQuery object
+        var range = document.createRange();
+        var sel = window.getSelection();
 
+        // Set the range of the DOM element
+        range.setStart(el.childNodes[0], pos);
+        range.collapse(true);
+
+        // Set the selection point
+        sel.removeAllRanges();
+        sel.addRange(range);
+    }
 
     // Capture 'on key up' event for auto-correction
     this.keyup(function(e) {
+        var activeElement = document.activeElement;
+        var activeObject = $(activeElement).find('.actiObjectSelected');
+
         // If currently entered key is not 'space' then don't need to proceed further
         if (32 != e.keyCode) {
             return;
@@ -73,8 +97,12 @@ jQuery.fn.autocorrect = function(options) {
         }
 
         // Value of current field
-        var valueOfField = e.currentTarget.innerHTML;
-        console.log(valueOfField);
+        if (activeObject.length > 0) {
+            var valueOfField = activeObject[0].innerHTML;
+        } else {
+            var valueOfField = document.activeElement.innerHTML;
+        }
+
         // Get value of field upto caret's current position from start 
         var stringUptoCaretPosition = (valueOfField).substr(0, caretPosition);
 
@@ -111,19 +139,19 @@ jQuery.fn.autocorrect = function(options) {
 
         // Set new value of field
         this.value = (stringUptoCaretPosition + stringFromCaretPositionUptoEnd);
+        //console.log(this.value);
+
         // Set caret's position
-        $(this).html(this.value);
+        if (activeObject.length > 0) {
+            $(activeObject).html(this.value);
+            var node = activeObject;
+        } else {
+            $(document.activeElement).html(this.value);
+            var node = document.activeElement;
+        }
 
-        var node = this;
-        node.focus();
-        var textNode = node.firstChild;
+        //window.getSelection().setPosition(0);
         var caret = caretPosition + (stringToReplace.length - stringToSearch.length);
-        var range = document.createRange();
-        range.setStart(textNode, caret);
-        range.setEnd(textNode, caret);
-        var sel = window.getSelection();
-        sel.removeAllRanges();
-        sel.addRange(range);
-
+        SetCaretPosition(node, caret);
     });
 };
