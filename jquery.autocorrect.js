@@ -40,6 +40,7 @@ jQuery.fn.autocorrect = function(options) {
 
     // Function used to get caret's position
     getCaretPosition = function(editableDiv) {
+        console.log(editableDiv);
         var caretPos = 0,
             sel, range;
         if (window.getSelection) {
@@ -73,6 +74,7 @@ jQuery.fn.autocorrect = function(options) {
 
         // Value of current field
         var valueOfField = e.currentTarget.innerHTML;
+        console.log(valueOfField);
         // Get value of field upto caret's current position from start 
         var stringUptoCaretPosition = (valueOfField).substr(0, caretPosition);
 

@@ -1,0 +1,54 @@
+<html>
+
+<head>
+    <title>jQuery auto-correct example</title>
+    <script src="jquery-2.2.4.min.js"></script>
+    <script src="jquery.autocorrect.js"></script>
+    <style type="text/css">
+    .div_content {
+        border: 1px solid red;
+        height: 150px;
+        width: 800px;
+    }
+    </style>
+</head>
+
+<body>
+    <div id="outerbox" class="viewport-item" csdata="page" style="width:670px; height:835px; border: 1px solid green;">
+        <div data-csdata="page" id="page1">
+            <div class="div_content" id="div_content" contenteditable="true">This world is beautiful.</div>
+        </div>
+    </div>
+</body>
+<script type="text/javascript">
+$("#outerbox").autocorrect({
+    corrections: {
+        "411": "Information ",
+        "its": "It is ",
+        "2moro": "Tomorrow ",
+        "2nite": "Tonight ",
+        "asap": "As Soon As Possible ",
+        "atm": "At The Moment ",
+        "atys": "Anything You Say ",
+        "awa": "As Well As ",
+        "awc": "After Awhile Crocodile ",
+        "GM": "Good Morning ",
+        "GMTA": "Great Minds Think Alike ",
+        "GNT": "Good Night ",
+        "GOL": "Giggle Out Loud ",
+        "bmw m3": "BMW M3 Series ",
+        "m": "Motorsport ",
+        "sedan": "Sport sedan ",
+        "i'm": "I am ",
+        "he's": "He is ",
+        "she's": "She is ",
+        "it's": "It is ",
+        "you're": "You are ",
+        "we're": "We are ",
+        "they're": "They are ",
+        "sample": "test drive "
+    }
+});
+</script>
+
+</html>
